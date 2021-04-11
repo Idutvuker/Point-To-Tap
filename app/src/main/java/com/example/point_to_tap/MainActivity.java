@@ -7,8 +7,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private static final int SLIDER_MAX_PROGRESS = 100;
-    private static final int SLIDER_DEFAULT_PROGRESS = 50;
-    private static final int ANIMATION_MAX_DURATION_MS = 3000;
+    private static final int SLIDER_DEFAULT_PROGRESS = 30;
+
+    private static final float MIN_SPEED = 1f;
+    private static final float MAX_SPEED = 10f;
+
+    private static final int MILLISECONDS_IN_SECOND = 1000;
 
     private CanvasView canvasView;
 
@@ -18,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
         setContentView(R.layout.activity_main);
 
         canvasView = findViewById(R.id.canvasView);
-        SeekBar seekBar = findViewById(R.id.seekBar);
+        SeekBar seekBar = findViewById(R.id.speedSlider);
         seekBar.setOnSeekBarChangeListener(this);
 
         seekBar.setMax(SLIDER_MAX_PROGRESS);
@@ -27,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements SeekBar.OnSeekBar
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        int duration = ANIMATION_MAX_DURATION_MS * progress / seekBar.getMax();
+        float speed = MIN_SPEED + (MAX_SPEED - MIN_SPEED) * progress / seekBar.getMax();
+        int duration = (int) (MILLISECONDS_IN_SECOND / speed);
         canvasView.setAnimationDuration(duration);
     }
 
